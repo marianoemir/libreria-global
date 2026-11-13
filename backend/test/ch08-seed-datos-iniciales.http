@@ -1,0 +1,65 @@
+@base = http://127.0.0.1:8000
+
+# CH-15 / seed vigente — Datos iniciales (seed) y verificación del estado sembrado
+#
+# Prerrequisitos:
+#   1) Usar una base local dedicada y vacía (libreria_c15). El esquema debe existir
+#      (arrancar `uvicorn app.main:app` al menos una vez para que el lifespan cree las tablas).
+#   2) Ejecutar `python -m app.seed` y confirmar exit 0. Cada ejecución reinicia los
+#      datos de las 9 tablas del proyecto al dataset documentado (27 filas).
+#   3) uvicorn en escucha en @base.
+#
+# Dataset esperado tras el seed (27 filas):
+# - 2 editoriales, 2 géneros, 5 autores, 5 libros (ids 1..5), 5 autorías,
+#   3 clientes, 2 perfiles, 1 venta y 2 renglones.
+# - Cliente 2: "Tomás Ríos" (tomas@example.com). Venta 1: cliente 2, libro 1 ×2
+#   (25000.00) y libro 4 ×1 (27000.00), total 77000.00, fecha fija.
+# - El ISBN 978-950-00-0006-6 NO está precargado en el seed (se crea una sola vez
+#   en test/ch09-c07-consultas-fijas.http para evitar error 409 por duplicación).
+
+### Estado inicial — GET /health/ready
+# Esperado: 200 {"estado":"listo"}
+GET {{base}}/health/ready
+
+### Estado inicial — GET /libros/ devuelve 5 libros
+# Esperado: 200, lista de 5 libros (ids 1..5). No debe aparecer el ISBN 978-950-00-0006-6.
+GET {{base}}/libros/
+
+### Estado inicial — GET /clientes/2 es Tomás Ríos
+# Esperado: 200, id 2, nombre "Tomás Ríos", email "tomas@example.com", perfil null.
+GET {{base}}/clientes/2
+
+### Estado inicial — GET /ventas/1 del dataset
+# Esperado: 200, total "77000.00", cliente Tomás Ríos (tomas@example.com) y dos renglones:
+# libro 1 ×2 precio_unitario "25000.00" subtotal "50000.00",
+# libro 4 ×1 precio_unitario "27000.00" subtotal "27000.00".
+GET {{base}}/ventas/1
+
+### Ejemplo enunciado / C-06 — POST /ventas/ produce id 2 y total 77000.00
+# Precondición: ejecutar sobre el estado recién sembrado (venta 1 ya existe con id 1).
+# Esperado: 201, id 2, cliente Tomás Ríos (tomas@example.com), renglones con titulo, precio_unitario
+# y subtotal calculados por el servidor, total "77000.00".
+POST {{base}}/ventas/
+Content-Type: application/json
+
+{
+  "cliente_id": 2,
+  "renglones": [
+    {"libro_id": 1, "cantidad": 2},
+    {"libro_id": 4, "cantidad": 1}
+  ]
+}
+
+### Stock sin descuento — libro 1 (KB §1 pendiente)
+# Esperado: 200, stock 10 (el seed y el alta no descuentan stock).
+GET {{base}}/libros/1
+
+### Stock sin descuento — libro 4 (KB §1 pendiente)
+# Esperado: 200, stock 7.
+GET {{base}}/libros/4
+
+### Repetibilidad — procedimiento
+# 1) Tras el seed y la creación de la venta 2, crear filas adicionales por la API.
+# 2) Reejecutar `python -m app.seed`.
+# 3) Verificar: conteos vuelven exactamente a 27 filas, GET /ventas/2 -> 404, y el siguiente
+#    POST /ventas/ del ejemplo vuelve a devolver 201 con id 2.

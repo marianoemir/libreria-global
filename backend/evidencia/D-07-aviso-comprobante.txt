@@ -1,0 +1,20 @@
+# D-07 - Aviso del comprobante de la venta registrada en D-03
+# Fecha: jueves 12/11/2026, ~17:30 (hora de Argentina)
+# Nota: la IP del cliente se reemplazo por <IP-cliente>; el resto es la salida tal cual.
+
+## [VPS] docker logs --tail 15 libreria (inmediatamente despues del POST /ventas/ de D-03)
+INFO:     Arranque completado; tablas creadas: ['autor', 'cliente', 'editorial', 'genero', 'libro', 'libro_autor', 'perfil_cliente', 'renglon_venta', 'venta']
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:42660 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60102 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33658 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48504 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49614 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36646 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33746 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     <IP-cliente>:64096 - "GET /health/ready HTTP/1.1" 200 OK
+INFO:     <IP-cliente>:38955 - "GET /libros/ HTTP/1.1" 200 OK
+INFO:     <IP-cliente>:64098 - "POST /ventas/ HTTP/1.1" 201 Created
+INFO:     Aviso comprobante venta_id=2 email=tomas@example.com
+INFO:     127.0.0.1:55092 - "GET /health/ready HTTP/1.1" 200 OK
