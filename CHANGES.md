@@ -87,11 +87,11 @@ GL-06 ────────────────────────�
   - `backend/test/` casos `.http` de ventas (ejemplos reales)
 
 ### [GL-06] `cors-backend`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-14)
 - **Dueño**: Mariano · **Revisor**: Facundo · **Governance**: BAJO
 - **Scope**: `CORSMiddleware` en `backend/app/main.py` con los orígenes tomados de la variable `CORS_ORIGINS` (lista separada por comas, con esquema, sin barra final) leída por `get_cors_origins()` en `backend/app/core/config.py`; sin la variable no se habilita ningún origen. Documentar la variable en `backend/env.example`. **Material listo** en el kit. Pedido por el profe en la clase del 12/11. Con la vía interna de Nginx no hace falta para funcionar, pero queda implementado y documentado.
 - **Dependencias**: ninguna
-- **Escenarios mínimos**: (1) con `CORS_ORIGINS=http://localhost:8080` una petición con `Origin: http://localhost:8080` recibe `access-control-allow-origin`; (2) con un origen no listado la respuesta no incluye ese encabezado; (3) sin la variable la API arranca igual y funciona; (4) la suite del backend sigue en verde.
+- **Escenarios mínimos**: (1) con `CORS_ORIGINS=http://localhost:8080` una petición con `Origin: http://localhost:8080` recibe `access-control-allow-origin`; (2) con un origen no listado la respuesta no incluye ese encabezado; (3) sin la variable la API arranca igual y funciona; (4) regresión manual de salud y catálogo con curl.exe.
 - **Leer antes**:
   - `backend/AGENTS.md` (reglas duras del backend; rigen dentro de `backend/`)
   - `backend/app/main.py`, `backend/app/core/config.py`
