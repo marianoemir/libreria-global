@@ -41,7 +41,7 @@ GL-06 ────────────────────────�
   - `docs/ARRANQUE.md` §3 (backend local)
 
 ### [GL-02] `cliente-http`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-14)
 - **Dueño**: Facundo · **Revisor**: Mariano · **Governance**: ALTO (todos dependen de él)
 - **Scope**: partir el `app.js` del parcial 1 y dejar la base común: `js/util.js`, `js/api.js` (cliente `fetch` único con base `/api`, error uniforme `ApiError`, mensajes de 404/409/422/502 y error de conexión), `js/app.js` (solo arranque) y los 5 módulos vacíos (`catalogo`, `libros`, `clientes`, `ventas`, `historial`). Adoptar `index.html` con las secciones y los IDs de `docs/referencia/index.draft.html`. **Eliminar todo uso de `localStorage`** del parcial 1. **Material listo y probado** en `docs/referencia/frontend-js/` (23 comprobaciones: `node docs/referencia/frontend-js/prueba-api.js`).
 - **Dependencias**: GL-01
@@ -51,6 +51,7 @@ GL-06 ────────────────────────�
   - `docs/CONTRATO-API.md` §Errores
   - `docs/referencia/frontend-js/` y `docs/referencia/index.draft.html`
 - **Nota**: hasta que GL-03/04/05 se archiven la interfaz muestra las secciones sin datos (los módulos son placeholders). Es esperado.
+- **Verificación**: 5.1 y 5.4(a) se verificaron con un proxy local de Node equivalente al Nginx del contenedor (sirve `frontend/public` y reenvía `/api/`; responde 502 si el backend no está), porque Docker no está disponible en el equipo; 5.3 contra el backend real con seed y 5.4(b) con el destino cerrado.
 
 ### [GL-03] `catalogo-fetch` (Ejercicio 1 · 20 pts)
 - **Estado**: `[ ]` pendiente
@@ -130,6 +131,8 @@ GL-06 ────────────────────────�
 | PA-5 | El alta de venta no descuenta stock (duda abierta heredada de `backend/knowledge-base`). | No se cambia: el PDF lo describe así. |
 | PA-6 | Historial ordenado por ID ascendente (la venta más nueva queda en la última página). | Aceptado; se documenta. No se toca el backend. |
 | PA-7 | La fecha límite exacta y el canal de entrega. | Campus: cierre martes 17/11 00:00. Confirmar canal. |
+| PA-8 | ¿Quién sube el parámetro `?v=` de los `<script>` de `index.html` en cada change? | **Propuesta:** cada dueño sube el número al tocar su archivo; GL-02 deja `?v=5` (el del borrador). Confirmar si se mantiene el parámetro. |
+| PA-9 | ¿GL-03/04/05 parten solo del kit `docs/referencia/frontend-js/` y los docs, o reutilizan fragmentos del `app.js` del parcial 1? | **Propuesta:** kit + docs como base; el `app.js` viejo queda en el historial de git solo como referencia de marcado y validaciones. Decisión del equipo. |
 
 ---
 
