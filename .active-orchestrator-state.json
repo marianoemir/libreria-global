@@ -1,0 +1,47 @@
+{
+  "version": 5,
+  "step": "done",
+  "owner": "active-orchestrator",
+  "discovery": {
+    "skipped": true
+  },
+  "kb": {
+    "created_by": "manual",
+    "source": "ingest",
+    "discovery": {
+      "problem": "Integrar el frontend del parcial 1 con la API de la libreria y desplegar ambos como dos servicios en Easypanel (Global de Programacion III).",
+      "system_type": "monorepo (frontend estatico + API)",
+      "domain": "libreria (catalogo y ventas de libros)",
+      "stack": "HTML/CSS/JS nativos + Nginx 1.30 + Python 3.12 + FastAPI + SQLModel + SQLAlchemy 2.0 async + asyncpg + PostgreSQL + Docker + Easypanel",
+      "needs_infra": true
+    },
+    "files": [
+      "backend/knowledge-base/README.md",
+      "docs/CONTRATO-API.md",
+      "docs/ARQUITECTURA-FRONTEND.md"
+    ]
+  },
+  "visual_design": {
+    "created_by": "manual",
+    "mode": "off",
+    "status": "off"
+  },
+  "roadmap": {
+    "created_by": "manual",
+    "source": "CHANGES.md",
+    "changes": ["GL-01", "GL-02", "GL-03", "GL-04", "GL-05", "GL-06", "GL-07", "GL-08"],
+    "revision": 1
+  },
+  "agents": {
+    "created_by": "manual",
+    "files": ["CLAUDE.md", "AGENTS.md"],
+    "reglas_applied": [
+      "sin localStorage para registros",
+      "solo prefijo /api en el JS",
+      "sin frameworks ni TypeScript",
+      "sin docker compose",
+      "importes tal cual los devuelve la API",
+      "enunciado (PDF) prevalece sobre las reglas y las skills"
+    ]
+  }
+}

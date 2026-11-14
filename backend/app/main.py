@@ -18,11 +18,13 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
 # Import intencional para fail-fast: valida DATABASE_URL al arrancar
 # (1.3), incluso antes del lifespan. El motor se crea en el lifespan.
 from app.core import config  # noqa: F401
+from app.core.config import get_cors_origins
 from app.core.database import create_engine, create_session_factory
 from app.modules.autores.router import router as autores_router
 from app.modules.editoriales.router import router as editoriales_router
@@ -64,6 +66,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(lifespan=lifespan)
+
+# GL-06: CORS por variable de entorno. Solo los orígenes de CORS_ORIGINS
+# (el dominio del frontend) pueden llamar a la API desde un navegador.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_cors_origins(),
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(health_router)
 app.include_router(clientes_router)
 app.include_router(libros_router)

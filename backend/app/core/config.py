@@ -46,6 +46,18 @@ def get_sql_echo() -> bool:
     return _parse_bool(os.getenv("SQL_ECHO"))
 
 
+def get_cors_origins() -> list[str]:
+    """Devuelve los orígenes permitidos por CORS desde ``CORS_ORIGINS``.
+
+    Lista separada por comas, cada origen con esquema y sin barra final
+    (ej. ``https://libreria.dominio.me,http://localhost:8080``). Si la
+    variable falta o está vacía devuelve ``[]``: no se habilita ningún
+    origen cruzado (el frontend por Nginx, mismo origen, no la necesita).
+    """
+    crudo = os.getenv("CORS_ORIGINS", "")
+    return [o.strip().rstrip("/") for o in crudo.split(",") if o.strip()]
+
+
 # Validación al importar: fail-fast para que ``uvicorn app.main:app``
 # termine con error claro si ``DATABASE_URL`` falta o está vacía,
 # incluso antes del lifespan (2.1).
