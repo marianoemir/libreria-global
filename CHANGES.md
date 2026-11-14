@@ -31,7 +31,7 @@ GL-06 ────────────────────────�
 ## Changes
 
 ### [GL-01] `monorepo-docker-frontend`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-14)
 - **Dueño**: Mariano · **Revisor**: Andrés · **Governance**: MEDIO
 - **Scope**: dejar el frontend listo para construirse como imagen: `frontend/public/` (ya movido), `frontend/Dockerfile`, `frontend/.dockerignore` y `frontend/default.conf.template` (Dockerfile y plantilla idénticos al PDF, Ejercicio 4; el `.dockerignore` lleva las líneas del PDF más `openspec`, `.opencode` y `docs`). Probar la imagen en local contra el backend: `docker build`, `docker run` con `API_UPSTREAM`, y comprobar `http://127.0.0.1:8080/` (200) y `/api/health/ready` (200). **Material listo** en el kit (el apply es copiar y verificar).
 - **Dependencias**: ninguna
