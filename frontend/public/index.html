@@ -1,11 +1,20 @@
 <!DOCTYPE html>
+<!-- Frontend de la librería (GL-02). Cada dueño edita SOLO su sección. -->
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Librería Apolo Cono Sur — Catálogo</title>
   <link rel="stylesheet" href="css/styles.css">
-  <script defer src="js/app.js?v=4"></script>
+  <!-- Orden obligatorio: base compartida, módulos y arranque (ver docs/ARQUITECTURA-FRONTEND.md) -->
+  <script defer src="js/util.js?v=5"></script>
+  <script defer src="js/api.js?v=5"></script>
+  <script defer src="js/catalogo.js?v=5"></script>
+  <script defer src="js/libros.js?v=5"></script>
+  <script defer src="js/clientes.js?v=5"></script>
+  <script defer src="js/ventas.js?v=5"></script>
+  <script defer src="js/historial.js?v=5"></script>
+  <script defer src="js/app.js?v=5"></script>
 </head>
 <body>
   <header class="contenedor">
@@ -22,28 +31,53 @@
   </header>
 
   <main id="contenido-principal" class="contenedor">
-    <!-- Catálogo (vista inicial: index.html es el Catálogo) -->
+    <!-- Catálogo (GET /libros/ con titulo, limit y offset) -->
     <section id="catalogo" aria-labelledby="catalogo-titulo">
       <h2 id="catalogo-titulo">Catálogo</h2>
 
       <form id="catalogo-buscador-form" action="#" method="get">
         <label for="catalogo-busqueda" id="catalogo-busqueda-label">Buscar por título</label>
         <input type="search" id="catalogo-busqueda" name="busqueda" placeholder="Ej.: El principito" class="campo">
+        <label for="catalogo-limit">Libros por página</label>
+        <select id="catalogo-limit" name="limit" class="campo">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20" selected>20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
         <button type="button" id="catalogo-buscar-boton" class="boton boton-primario">Buscar</button>
       </form>
 
+      <p id="catalogo-cargando" role="status" hidden class="mensaje">Cargando catálogo…</p>
+      <p id="catalogo-error" role="alert" hidden class="mensaje mensaje-error">
+        <span id="catalogo-error-texto">No se pudo conectar con el servidor.</span>
+        <button type="button" id="catalogo-reintentar" class="boton">Reintentar</button>
+      </p>
       <p id="catalogo-sin-resultados" role="status" hidden class="mensaje">No se encontraron libros con ese título.</p>
+      <p id="catalogo-vacio" role="status" hidden class="mensaje">No hay libros en el catálogo.</p>
 
       <div id="catalogo-lista" aria-live="polite"></div>
-      <p id="catalogo-vacio" role="status" hidden class="mensaje">No hay libros en el catálogo.</p>
+
+      <div id="catalogo-paginacion" hidden>
+        <button type="button" id="catalogo-anterior" class="boton">Anterior</button>
+        <span id="catalogo-pagina" role="status"></span>
+        <button type="button" id="catalogo-siguiente" class="boton">Siguiente</button>
+      </div>
+
+      <div id="catalogo-detalle" aria-live="polite"></div>
     </section>
 
-    <!-- Libros -->
+    <!-- Libros (POST /libros/) -->
     <section id="libros" aria-labelledby="libros-titulo">
       <h2 id="libros-titulo">Libros</h2>
 
       <h3 id="libros-form-titulo">Alta de libro</h3>
-      <form id="libros-form" action="#" method="post">
+      <p id="libros-opciones-error" role="alert" hidden class="mensaje mensaje-error">
+        <span id="libros-opciones-error-texto"></span>
+        <button type="button" id="libros-opciones-reintentar" class="boton">Reintentar</button>
+      </p>
+      <form id="libros-form" action="#" method="post" novalidate>
         <div>
           <label for="libro-titulo">Título</label>
           <input type="text" id="libro-titulo" name="titulo" required class="campo">
@@ -57,76 +91,79 @@
           <input type="number" id="libro-precio" name="precio" min="0" step="0.01" class="campo">
         </div>
         <div>
+          <label for="libro-stock">Stock</label>
+          <input type="number" id="libro-stock" name="stock" min="0" step="1" value="0" class="campo">
+        </div>
+        <div>
           <label for="libro-editorial">Editorial</label>
           <select id="libro-editorial" name="editorial" class="campo">
-            <option value="" disabled selected>Seleccioná una editorial</option>
-            <option value="ed1">Editorial Ejemplo Uno</option>
-            <option value="ed2">Editorial Ejemplo Dos</option>
+            <option value="" disabled selected>Cargando editoriales…</option>
           </select>
         </div>
         <div>
           <label for="libro-genero">Género</label>
           <select id="libro-genero" name="genero" class="campo">
             <option value="">Sin clasificar</option>
-            <option value="gen1">Fábula (ejemplo)</option>
-            <option value="gen2">Cuento (ejemplo)</option>
           </select>
         </div>
-        <div>
-          <label for="libro-autores">Autores</label>
-          <select id="libro-autores" name="autores" multiple class="campo">
-            <option value="au1">Antoine de Saint-Exupéry (ejemplo)</option>
-            <option value="au2">Autora Ejemplo (ejemplo)</option>
-          </select>
-        </div>
+
+        <fieldset id="libro-autores-grupo">
+          <legend>Autores (al menos uno)</legend>
+          <div>
+            <label for="libro-autor-id">ID de autor</label>
+            <input type="number" id="libro-autor-id" min="1" step="1" class="campo">
+            <label for="libro-autor-rol">Rol</label>
+            <select id="libro-autor-rol" class="campo">
+              <option value="autor" selected>Autor</option>
+              <option value="coautor">Coautor</option>
+              <option value="traductor">Traductor</option>
+              <option value="ilustrador">Ilustrador</option>
+            </select>
+            <button type="button" id="libro-autor-agregar-boton" class="boton">Verificar y agregar</button>
+          </div>
+          <p id="libro-autor-mensaje" role="status" hidden class="mensaje"></p>
+          <ol id="libro-autores-lista"></ol>
+          <p id="libro-autores-vacio" role="status" class="mensaje">Todavía no agregaste autores.</p>
+        </fieldset>
+
         <button type="button" id="libros-agregar-boton" class="boton boton-primario">Agregar libro</button>
       </form>
-      <p id="libros-exito" role="status" hidden class="mensaje mensaje-exito">Libro agregado correctamente.</p>
-      <p id="libros-error" role="alert" hidden class="mensaje mensaje-error">No se pudo agregar el libro: revisá los campos.</p>
+      <p id="libros-exito" role="status" hidden class="mensaje mensaje-exito"></p>
+      <p id="libros-error" role="alert" hidden class="mensaje mensaje-error"></p>
 
       <h3 id="libros-listado-titulo">Listado de libros registrados</h3>
+      <p id="libros-cargando" role="status" hidden class="mensaje">Cargando libros…</p>
+      <p id="libros-tabla-error" role="alert" hidden class="mensaje mensaje-error">
+        <span id="libros-tabla-error-texto"></span>
+        <button type="button" id="libros-reintentar" class="boton">Reintentar</button>
+      </p>
       <div class="tabla-scroll">
       <table id="libros-tabla">
-        <caption>Libros registrados</caption>
+        <caption>Libros registrados (hasta 100 por la API)</caption>
         <thead>
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Título</th>
             <th scope="col">ISBN</th>
             <th scope="col">Editorial</th>
             <th scope="col">Género</th>
-            <th scope="col">Autores</th>
+            <th scope="col">Stock</th>
             <th scope="col">Precio</th>
           </tr>
         </thead>
         <tbody id="libros-lista">
-          <tr>
-            <td>El Principito (ejemplo)</td>
-            <td>978-0156012195</td>
-            <td>Editorial Ejemplo Uno</td>
-            <td>Fábula</td>
-            <td>Antoine de Saint-Exupéry (ejemplo)</td>
-            <td>$5000.00</td>
-          </tr>
-          <tr>
-            <td>Cuentos reunidos (ejemplo)</td>
-            <td>978-0000000002</td>
-            <td>Editorial Ejemplo Dos</td>
-            <td>Sin clasificar</td>
-            <td>Autora Ejemplo (ejemplo)</td>
-            <td>$3200.50</td>
-          </tr>
         </tbody>
       </table>
       </div>
       <p id="libros-vacio" role="status" hidden class="mensaje">No hay libros registrados todavía.</p>
     </section>
 
-    <!-- Clientes -->
+    <!-- Clientes (POST /clientes/ y GET /clientes/{id}) -->
     <section id="clientes" aria-labelledby="clientes-titulo">
       <h2 id="clientes-titulo">Clientes</h2>
 
       <h3 id="clientes-form-titulo">Alta de cliente</h3>
-      <form id="clientes-form" action="#" method="post">
+      <form id="clientes-form" action="#" method="post" novalidate>
         <div>
           <label for="cliente-nombre">Nombre completo</label>
           <input type="text" id="cliente-nombre" name="nombre" required class="campo">
@@ -137,35 +174,37 @@
         </div>
         <button type="button" id="clientes-agregar-boton" class="boton boton-primario">Agregar cliente</button>
       </form>
-      <p id="clientes-exito" role="status" hidden class="mensaje mensaje-exito">Cliente agregado correctamente.</p>
-      <p id="clientes-error" role="alert" hidden class="mensaje mensaje-error">No se pudo agregar el cliente: revisá los campos.</p>
+      <p id="clientes-exito" role="status" hidden class="mensaje mensaje-exito"></p>
+      <p id="clientes-error" role="alert" hidden class="mensaje mensaje-error"></p>
 
-      <h3 id="clientes-listado-titulo">Listado de clientes registrados</h3>
+      <h3 id="clientes-buscar-titulo">Buscar cliente por ID</h3>
+      <p class="mensaje">La API consulta clientes de a uno por su ID.</p>
+      <div id="clientes-buscar-form">
+        <label for="cliente-buscar-id">ID de cliente</label>
+        <input type="number" id="cliente-buscar-id" min="1" step="1" class="campo">
+        <button type="button" id="clientes-buscar-boton" class="boton">Buscar</button>
+      </div>
+      <p id="clientes-buscar-mensaje" role="status" hidden class="mensaje"></p>
+
+      <h3 id="clientes-listado-titulo">Clientes registrados o consultados en esta sesión</h3>
       <div class="tabla-scroll">
       <table id="clientes-tabla">
-        <caption>Clientes registrados</caption>
+        <caption>Clientes registrados o consultados</caption>
         <thead>
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Nombre completo</th>
             <th scope="col">Email</th>
           </tr>
         </thead>
         <tbody id="clientes-lista">
-          <tr>
-            <td>María García (ejemplo)</td>
-            <td>maria.garcia@ejemplo.com</td>
-          </tr>
-          <tr>
-            <td>Juan Pérez (ejemplo)</td>
-            <td>juan.perez@ejemplo.com</td>
-          </tr>
         </tbody>
       </table>
       </div>
-      <p id="clientes-vacio" role="status" hidden class="mensaje">No hay clientes registrados todavía.</p>
+      <p id="clientes-vacio" role="status" hidden class="mensaje">Todavía no registraste ni consultaste clientes.</p>
     </section>
 
-    <!-- Ventas -->
+    <!-- Ventas (POST /ventas/) -->
     <section id="ventas" aria-labelledby="ventas-titulo">
       <h2 id="ventas-titulo">Ventas</h2>
       <div>
@@ -174,8 +213,15 @@
           <option value="" disabled selected>Seleccioná un cliente</option>
         </select>
       </div>
+      <div id="venta-cliente-buscar">
+        <label for="venta-cliente-id">o buscá un cliente por ID</label>
+        <input type="number" id="venta-cliente-id" min="1" step="1" class="campo">
+        <button type="button" id="venta-cliente-buscar-boton" class="boton">Buscar cliente</button>
+      </div>
+      <p id="venta-cliente-mensaje" role="status" hidden class="mensaje"></p>
 
       <h3 id="ventas-renglones-titulo">Renglones de la venta</h3>
+      <p id="ventas-libros-error" role="alert" hidden class="mensaje mensaje-error"></p>
       <div id="ventas-renglon-form">
         <label for="renglon-libro">Libro</label>
         <select id="renglon-libro" name="libro" class="campo">
@@ -188,13 +234,13 @@
 
       <div class="tabla-scroll">
       <table id="ventas-renglones-tabla">
-        <caption>Renglones de la venta actual</caption>
+        <caption>Renglones de la venta actual (precios de catálogo, estimados)</caption>
         <thead>
           <tr>
             <th scope="col">Libro</th>
             <th scope="col">Cantidad</th>
-            <th scope="col">Precio unitario</th>
-            <th scope="col">Subtotal</th>
+            <th scope="col">Precio de catálogo</th>
+            <th scope="col">Subtotal estimado</th>
             <th scope="col">Acción</th>
           </tr>
         </thead>
@@ -206,16 +252,24 @@
 
       <h3 id="ventas-resumen-titulo">Resumen de la venta</h3>
       <div id="ventas-resumen">
-        <p>Total: <span id="ventas-total">$0.00</span></p>
+        <p>Total estimado: <span id="ventas-total">$0.00</span></p>
       </div>
       <button type="button" id="ventas-confirmar-boton" class="boton boton-primario">Confirmar venta</button>
       <p id="ventas-exito" role="status" hidden class="mensaje mensaje-exito"></p>
       <p id="ventas-error" role="alert" hidden class="mensaje mensaje-error"></p>
+
+      <div id="ventas-comprobante" aria-live="polite"></div>
     </section>
 
-    <!-- Historial -->
+    <!-- Historial (GET /ventas/ y GET /ventas/{id}) -->
     <section id="historial" aria-labelledby="historial-titulo">
       <h2 id="historial-titulo">Historial</h2>
+
+      <p id="historial-cargando" role="status" hidden class="mensaje">Cargando historial…</p>
+      <p id="historial-error" role="alert" hidden class="mensaje mensaje-error">
+        <span id="historial-error-texto"></span>
+        <button type="button" id="historial-reintentar" class="boton">Reintentar</button>
+      </p>
 
       <div class="tabla-scroll">
       <table id="historial-tabla">
@@ -235,18 +289,18 @@
       </div>
       <p id="historial-vacio" role="status" hidden class="mensaje">No hay ventas registradas todavía.</p>
 
+      <div id="historial-paginacion" hidden>
+        <button type="button" id="historial-anterior" class="boton">Anterior</button>
+        <span id="historial-pagina" role="status"></span>
+        <button type="button" id="historial-siguiente" class="boton">Siguiente</button>
+      </div>
+
       <div id="historial-detalle" aria-live="polite"></div>
     </section>
   </main>
 
   <footer class="contenedor">
-    <p>Parcial 1 — Frontend de librería.</p>
-    <!-- Pendiente Ej.6: README con casos manuales y persistencia -->
+    <p>Global de Programación III — Librería integrada con la API.</p>
   </footer>
-  <!-- Pendiente Ej.2: identidad visual y adaptación CSS -->
-  <!-- Pendiente Ej.3: datos en JS, catálogo generado y filtro -->
-  <!-- Pendiente Ej.4: validaciones y preventDefault -->
-  <!-- Pendiente Ej.5: cálculos e historial inmutable -->
-  <!-- Pendiente Ej.6: localStorage y README de casos manuales -->
 </body>
 </html>
