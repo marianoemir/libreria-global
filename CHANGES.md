@@ -54,7 +54,7 @@ GL-06 ────────────────────────�
 - **Verificación**: 5.1 y 5.4(a) se verificaron con un proxy local de Node equivalente al Nginx del contenedor (sirve `frontend/public` y reenvía `/api/`; responde 502 si el backend no está), porque Docker no está disponible en el equipo; 5.3 contra el backend real con seed y 5.4(b) con el destino cerrado.
 
 ### [GL-03] `catalogo-fetch` (Ejercicio 1 · 20 pts)
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-14)
 - **Dueño**: Andrés · **Revisor**: Facundo · **Governance**: MEDIO
 - **Scope**: `js/catalogo.js` + sección `#catalogo`. `GET /libros/` con `titulo` (búsqueda parcial), `limit` (1–100) y `offset` (≥0); reiniciar `offset` al cambiar el filtro; paginación anterior/siguiente; cada libro con título, ISBN, precio, editorial y género (nulo → «Sin clasificar»); detalle con autores por `GET /libros/{id}`; estados cargando / vacío / sin coincidencias / error de conexión con «Reintentar». Casos **G-01**.
 - **Dependencias**: GL-02
