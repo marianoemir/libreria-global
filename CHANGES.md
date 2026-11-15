@@ -65,7 +65,7 @@ GL-06 ────────────────────────�
   - `docs/ARQUITECTURA-FRONTEND.md` §Estados de interfaz
 
 ### [GL-04] `altas-fetch` (Ejercicio 2 · 20 pts)
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-15) · sin commit ni PR al archivar; tarea 9.6 (evidencia para el PR) queda pendiente
 - **Dueño**: Facundo · **Revisor**: Andrés · **Governance**: MEDIO
 - **Scope**: `js/libros.js`, `js/clientes.js` + secciones `#libros` y `#clientes`. Alta de libro (`POST /libros/`: título, ISBN, precio > 0, stock entero ≥ 0, editorial y género desde `GET /editoriales/` y `GET /generos/`, ≥ 1 autoría `{autor_id, rol, orden}` verificando cada autor con `GET /autores/{id}` y mostrando su nombre antes de agregarlo). Alta de cliente (`POST /clientes/`) y **búsqueda por ID** (`GET /clientes/{id}`) mostrando el nombre. Validar en el cliente, mostrar el mensaje del servidor en 409/422, usar el registro devuelto (201) para actualizar vistas y `L.registrarCliente`. Casos **G-02** y **G-03**.
 - **Dependencias**: GL-02
