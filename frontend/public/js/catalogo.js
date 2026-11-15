@@ -86,6 +86,14 @@
     L.util.limpiar(n.detalle);
     if (cantidad === 0) {
       n.lista.hidden = true;
+      // Me pasé del final (la página anterior vino llena justo): no es "vacío".
+      if (estado.offset > 0) {
+        if (n.anterior) n.anterior.disabled = false;
+        if (n.siguiente) n.siguiente.disabled = true;
+        if (n.pagina) n.pagina.textContent = "No hay más resultados";
+        if (n.paginacion) n.paginacion.hidden = false;
+        return;
+      }
       if (n.paginacion) n.paginacion.hidden = true;
       // Sin filtro = catálogo vacío; con filtro = sin coincidencias.
       if (estado.filtro) {
