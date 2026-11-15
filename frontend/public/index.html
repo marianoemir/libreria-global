@@ -220,9 +220,15 @@
         <button type="button" id="venta-cliente-buscar-boton" class="boton">Buscar cliente</button>
       </div>
       <p id="venta-cliente-mensaje" role="status" hidden class="mensaje"></p>
+      <button type="button" id="ventas-cliente-reintentar" class="boton" hidden>Reintentar búsqueda de cliente</button>
 
       <h3 id="ventas-renglones-titulo">Renglones de la venta</h3>
-      <p id="ventas-libros-error" role="alert" hidden class="mensaje mensaje-error"></p>
+      <p id="ventas-libros-cargando" role="status" hidden class="mensaje">Cargando libros para la venta…</p>
+      <p id="ventas-libros-error" role="alert" hidden class="mensaje mensaje-error">
+        <span id="ventas-libros-error-texto"></span>
+        <button type="button" id="ventas-libros-reintentar" class="boton">Reintentar</button>
+      </p>
+      <p id="ventas-libros-vacio" role="status" hidden class="mensaje">No hay libros disponibles para agregar.</p>
       <div id="ventas-renglon-form">
         <label for="renglon-libro">Libro</label>
         <select id="renglon-libro" name="libro" class="campo">
@@ -259,7 +265,7 @@
       <p id="ventas-exito" role="status" hidden class="mensaje mensaje-exito"></p>
       <p id="ventas-error" role="alert" hidden class="mensaje mensaje-error"></p>
 
-      <div id="ventas-comprobante" aria-live="polite"></div>
+      <div id="ventas-comprobante" role="region" aria-label="Comprobante de venta" aria-live="polite"></div>
     </section>
 
     <!-- Historial (GET /ventas/ y GET /ventas/{id}) -->
@@ -296,7 +302,7 @@
         <button type="button" id="historial-siguiente" class="boton">Siguiente</button>
       </div>
 
-      <div id="historial-detalle" aria-live="polite"></div>
+      <div id="historial-detalle" role="region" aria-label="Detalle de venta" aria-live="polite"></div>
     </section>
   </main>
 
