@@ -1,9 +1,14 @@
 # Librería — Global de Programación III
 
 **Grupo:** Grupo 10 (Lobos Solitarios) · Comisión 1
+
 **Integrantes:** Mariano Chirino (GitHub: `marianoemir`), Andrés Fabre (GitHub: `andresfabre27`), Facundo Quiroga (GitHub: `Buhonero009`)
+
 **Materia:** Programación III — Tecnicatura Universitaria en Programación, UTN FRM
+
 **URL desplegada:** https://libreria.marianochirino.me (salud: `/api/health/ready`). Debe seguir operativa durante la corrección.
+
+**URL del repositorio:** https://github.com/marianoemir/libreria-global
 
 ## Qué es
 
@@ -42,8 +47,13 @@ Requisitos: Docker Desktop y Python 3.12. Pasos detallados (con PowerShell) en `
 - **Los clientes se buscan por ID.** La API no ofrece un listado de clientes, así que la interfaz los consulta por `GET /clientes/{id}`, muestra el nombre antes de usarlos y recuerda en memoria los registrados o consultados durante la sesión.
 - **Sin persistencia en el navegador.** No se usa `localStorage`: todo viene de la API; solo el borrador de la venta vive en memoria.
 - **Conexión interna entre servicios.** El navegador solo habla con el frontend (`/api/...`); Nginx reenvía al backend por la red interna, que no tiene dominio público.
-- **Sin migraciones.** Las tablas se crean al iniciar el backend (`create_all`). La cátedra confirmó que no se requiere Alembic.
+- **Sin Alembic ni migraciones.** Las tablas se crean al iniciar el backend (`create_all`). El docente indicó el 16/11/2026 que no se use Alembic y que se siga con `create_all`, porque quedó de otras comisiones (consulta en `evidencia/g07-consulta-alembic.png`). Por eso el backend no incluye `alembic.ini` ni `migrations/`.
 - **Historial.** La API lo devuelve por ID ascendente: la venta más reciente está en la última página.
+
+## Limitaciones conocidas
+
+- **Botón «Confirmar venta» durante el envío:** el código lo deshabilita mientras la petición está en curso (`frontend/public/js/ventas.js`, variable `enviandoVenta` y `boton.disabled = true`, que se restablece en el `finally`). No se pudo obtener una captura que lo muestre, porque el envío dura una fracción de segundo; se intentó repetidas veces. El detalle está en `evidencia/LEEME.md`.
+- **Borrador ante 409 o 422:** el código solo vacía el borrador cuando la API responde 201. Los rechazos de G-06 se probaron por API, no por pantalla.
 
 ## Metodología
 
