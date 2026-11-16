@@ -124,7 +124,7 @@ GL-06 ────────────────────────�
 
 | # | Pregunta | Estado / propuesta |
 |---|---|---|
-| PA-1 | El PDF lista `alembic.ini` y `migrations/` dentro de `backend/`, pero el backend (regla dura de `backend/AGENTS.md`) crea las tablas con `create_all`, sin migraciones. | **Propuesta:** mantener `create_all`, explicarlo en `DEPLOY.md` («las tablas se crean al iniciar; no hay migraciones») y **consultárselo al profe** antes de entregar. Agregar Alembic solo si lo exige. |
+| PA-1 | El PDF lista `alembic.ini` y `migrations/` dentro de `backend/`, pero el backend (regla dura de `backend/AGENTS.md`) crea las tablas con `create_all`, sin migraciones. | **Propuesta:** mantener `create_all`, explicarlo en `DEPLOY.md` («las tablas se crean al iniciar; no hay migraciones») y **consultárselo al profe** antes de entregar. Agregar Alembic solo si lo exige. **Resuelta el 16/11/2026:** la cátedra indicó seguir con `create_all`, sin Alembic (`evidencia/g07-consulta-alembic.png`). |
 | PA-2 | Conexión frontend→backend: interna o por internet. | **Decidido:** interna (`API_UPSTREAM=<proyecto>_<servicio>:8000`). Confirmar el nombre interno real en Easypanel. |
 | PA-3 | ¿Se usa la base `grupo10_db` ya existente o una nueva en Easypanel? ¿Mismo servidor del backend actual? | Mariano confirma antes de GL-07. |
 | PA-4 | Puerto del backend: cada grupo debe usar uno distinto si lo publica (8000, 8001…). | Con la vía interna no hay puerto publicado en el host; si se publica, coordinar con el profe. |

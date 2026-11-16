@@ -40,9 +40,9 @@ Requisitos: Docker Desktop y Python 3.12. Pasos detallados (con PowerShell) en `
 
 ## Decisiones de diseño
 
-- **Los clientes se buscan por ID.** La API no ofrece un listado de clientes, así que la interfaz los consulta por `GET /clientes/{id}`, muestra el nombre antes de usarlos y recuerda en memoria los registrados o consultados durante la sesión. COMPLETAR si el grupo cambia esta decisión.
+- **Los clientes se buscan por ID.** La API no ofrece un listado de clientes, así que la interfaz los consulta por `GET /clientes/{id}`, muestra el nombre antes de usarlos y recuerda en memoria los registrados o consultados durante la sesión.
 - **Sin persistencia en el navegador.** No se usa `localStorage`: todo viene de la API; solo el borrador de la venta vive en memoria.
-- **Conexión interna entre servicios.** El navegador solo habla con el frontend (`/api/...`); Nginx reenvía al backend por la red interna, que no tiene dominio público. COMPLETAR si se usa otra vía.
+- **Conexión interna entre servicios.** El navegador solo habla con el frontend (`/api/...`); Nginx reenvía al backend por la red interna, que no tiene dominio público.
 - **Sin migraciones.** Las tablas se crean al iniciar el backend (`create_all`). La cátedra confirmó que no se requiere Alembic.
 - **Historial.** La API lo devuelve por ID ascendente: la venta más reciente está en la última página.
 
