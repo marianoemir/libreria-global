@@ -1,8 +1,7 @@
 # Librería — Global de Programación III
 
-> **Esqueleto a completar en GL-08.** Los puntos marcados `COMPLETAR` los llena el grupo con datos reales. No poner contraseñas ni valores secretos.
-
-**Grupo:** Grupo 10 · **Integrantes:** Mariano Chirino, COMPLETAR, COMPLETAR
+**Grupo:** Grupo 10 (Lobos Solitarios) · Comisión 1
+**Integrantes:** Mariano Chirino (GitHub: `marianoemir`), Andrés Fabre (GitHub: `andresfabre27`), Facundo Quiroga (GitHub: `Buhonero009`)
 **Materia:** Programación III — Tecnicatura Universitaria en Programación, UTN FRM
 **URL desplegada:** https://libreria.marianochirino.me (salud: `/api/health/ready`). Debe seguir operativa durante la corrección.
 
@@ -52,4 +51,4 @@ El trabajo se hizo con Spec-Driven Development (OpenSpec + Active Stack). Los ch
 
 ## Documentación
 
-`DEPLOY.md` (despliegue) · `docs/CONTRATO-API.md` (API) · `docs/ARQUITECTURA-FRONTEND.md` · `evidencia/` (casos G-01 a G-07).
+`DEPLOY.md` (despliegue) · `docs/CONTRATO-API.md` (API) · `docs/ARQUITECTURA-FRONTEND.md` · `evidencia/` (casos G-01 a G-07; el detalle de cada caso está en `evidencia/LEEME.md`).

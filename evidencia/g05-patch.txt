@@ -1,0 +1,16 @@
+﻿G-05 Precio historico
+Fecha: 16/11/2026 17:39
+
+1) PS> curl.exe -s .../api/libros/1   (antes del PATCH)
+{"id":1,"isbn":"978-950-00-0001-1","titulo":"Rayuela","precio":"25000.00","stock":10,"editorial_id":1,"genero_id":1,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":1,"nombre":"Novela"},"autores":[{"autor_id":1,"rol":"autor","orden":1,"autor":{"id":1,"nombre":"Julio Cortázar"}}]}
+
+2) PS> curl.exe -s -X PATCH .../api/libros/1 --data-binary @cuerpo-precio.json   (cuerpo: precio 30000.00)
+{"id":1,"isbn":"978-950-00-0001-1","titulo":"Rayuela","precio":"30000.00","stock":10,"editorial_id":1,"genero_id":1,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":1,"nombre":"Novela"},"autores":[{"autor_id":1,"rol":"autor","orden":1,"autor":{"id":1,"nombre":"Julio Cortázar"}}]}
+HTTP 200
+
+3) PS> curl.exe -s .../api/ventas/1   (venta anterior, despues del PATCH)
+{"id":1,"fecha":"2026-01-15T12:00:00Z","total":"77000.00","cliente":{"id":2,"nombre":"Tomás Ríos","email":"tomas@example.com"},"renglones":[{"libro_id":4,"titulo":"Respiración artificial","cantidad":1,"precio_unitario":"27000.00","subtotal":"27000.00"},{"libro_id":1,"titulo":"Rayuela","cantidad":2,"precio_unitario":"25000.00","subtotal":"50000.00"}]}
+
+4) Restauracion: PS> curl.exe -s -X PATCH .../api/libros/1 --data-binary @cuerpo-precio.json   (cuerpo: precio 25000.00)
+{"id":1,"isbn":"978-950-00-0001-1","titulo":"Rayuela","precio":"25000.00","stock":10,"editorial_id":1,"genero_id":1,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":1,"nombre":"Novela"},"autores":[{"autor_id":1,"rol":"autor","orden":1,"autor":{"id":1,"nombre":"Julio Cortázar"}}]}
+HTTP 200

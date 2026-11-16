@@ -1,0 +1,5 @@
+﻿PS> curl.exe -s -X POST https://libreria.marianochirino.me/api/ventas/ --data-binary @cuerpo-repetido.json
+Cuerpo: {"cliente_id":2,"renglones":[{"libro_id":5,"cantidad":1},{"libro_id":5,"cantidad":1}]}
+Fecha: 16/11/2026 17:46
+{"detail":[{"type":"value_error","loc":["body"],"msg":"Value error, No se permiten libros repetidos en los renglones","input":{"cliente_id":2,"renglones":[{"libro_id":5,"cantidad":1},{"libro_id":5,"cantidad":1}]},"ctx":{"error":{}}}]}
+HTTP 422

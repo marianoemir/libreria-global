@@ -1,0 +1,5 @@
+﻿PS> curl.exe -s -X POST https://libreria.marianochirino.me/api/ventas/ --data-binary @cuerpo-inexistente.json
+Cuerpo: {"cliente_id":2,"renglones":[{"libro_id":9999,"cantidad":1}]}
+Fecha: 16/11/2026 17:46
+{"detail":"El libro indicado no existe"}
+HTTP 409
