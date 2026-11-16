@@ -1,0 +1,8 @@
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> cd C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> $r = curl.exe -s -o NUL -w "%{http_code}" https://libreria.marianochirino.me/api/health/ready
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> "PS> curl.exe -s -o NUL -w ""%{http_code}"" https://libreria.marianochirino.me/api/health/ready`r`nHTTP $r`r`nFecha: $(Get-Date -Format 'dd/MM/yyyy HH:mm')" | Out-File -Encoding utf8 evidencia\g07-health-200.txt
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> type evidencia\g07-health-200.txt
+PS> curl.exe -s -o NUL -w "%{http_code}" https://libreria.marianochirino.me/api/health/ready
+HTTP 200
+Fecha: 16/11/2026 13:29
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global>

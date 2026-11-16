@@ -1,62 +1,88 @@
-# DEPLOY.md — Despliegue en Easypanel
+# DEPLOY — Librería (Global, grupo10)
 
-> **Esqueleto a completar en GL-07/GL-08.** `COMPLETAR` = dato real del grupo. **Nunca** escribas contraseñas, `DATABASE_URL` reales ni tokens: solo los **nombres** de las variables.
+Despliegue en la VPS con Easypanel (Docker Swarm + Traefik). Este documento **no contiene credenciales**: solo nombres de variables.
 
-## Datos del despliegue
+## 1. Datos del despliegue
 
 | Dato | Valor |
 |---|---|
-| URL pública del frontend | COMPLETAR (`https://…`) |
-| Revisión desplegada (commit o tag de `main`) | COMPLETAR |
-| Proyecto de Easypanel | COMPLETAR (ej. `grupo10`) |
-| Base de datos | servicio PostgreSQL `grupo10_db` COMPLETAR si cambió |
-| Fecha del último despliegue | COMPLETAR |
+| URL pública | https://libreria.marianochirino.me/ |
+| Fecha del despliegue | 16/11/2026 |
+| Repositorio | `marianoemir/libreria-global`, rama `main` |
+| Revisión desplegada | `ef9d19c` (commit «Merge pull request #7…»; es el que muestra el log de build en `evidencia/g07-build-frontend.txt`) |
+| Proyecto Easypanel | `grupo10` |
+| Base de datos | servicio PostgreSQL `grupo10_db` (base `libreria`) |
 
-## Servicios
+## 2. Arquitectura
 
-Dos servicios **App** del mismo proyecto, ambos desde este repositorio (rama `main`) con builder **Dockerfile**.
+```
+Internet ──443──> Traefik ──80──> frontend (Nginx) ──/api/──> grupo10_backend:8000 (FastAPI) ──5432──> grupo10_db (Postgres)
+```
 
-| | Backend | Frontend |
+- Los únicos puertos publicados al exterior son **80 y 443** (Traefik), como muestra `evidencia/g07-docker-ps.txt`.
+- El **backend no tiene dominio** en Easypanel ni puerto publicado en el host: solo es alcanzable por la red interna, a través del proxy `/api/` del frontend.
+- La base `libreria` (usuario `libreria_app`) es independiente de la base de la calculadora, aunque comparten el servicio `grupo10_db`.
+
+## 3. Servicios
+
+| Servicio | Source (pestaña Github) | Build Path | Build | Puerto interno |
+|---|---|---|---|---|
+| `backend` | `marianoemir/libreria-global`, rama `main` | `/backend` | Dockerfile (`Dockerfile`) | 8000 |
+| `frontend` | `marianoemir/libreria-global`, rama `main` | `/frontend` | Dockerfile (`Dockerfile`) | 80 |
+
+- Dominio del frontend: `libreria.marianochirino.me`, HTTPS activado, destino HTTP puerto 80, path `/`.
+- El backend no tiene dominios asignados (se borró el dominio autogenerado `*.easypanel.host`).
+- Healthcheck del backend: `GET /health/ready`.
+
+## 4. Proxy
+
+Nginx del frontend reenvía `/api/` al backend usando `API_UPSTREAM`. Sin el prefijo `/api/` el pedido no llega a FastAPI (por ejemplo, `/libros/` responde 404 de Nginx).
+
+## 5. Variables de entorno (solo nombres)
+
+| Variable | Servicio | Descripción |
 |---|---|---|
-| Nombre del servicio | COMPLETAR (ej. `backend`) | COMPLETAR (ej. `frontend`) |
-| Build Path | `/backend` | `/frontend` |
-| Dockerfile | `backend/Dockerfile` | `frontend/Dockerfile` |
-| Puerto del contenedor | 8000 | 80 |
-| Dominio público | **ninguno** (red interna) | COMPLETAR, HTTPS, destino puerto 80 |
+| `DATABASE_URL` | backend | URL de conexión, driver `postgresql+asyncpg`, base `libreria`. **Su valor no se versiona.** |
+| `SQL_ECHO` | backend | `false` en producción. |
+| `CORS_ORIGINS` | backend | Origen permitido: `https://libreria.marianochirino.me` (sin barra final). |
+| `API_UPSTREAM` | frontend | Destino interno del proxy: `grupo10_backend:8000`. |
 
-## Variables de entorno (solo nombres)
+Los valores se cargan en la pestaña **Environment** de cada servicio, sin tildar «Create .env file».
 
-| Servicio | Variable | Descripción |
-|---|---|---|
-| backend | `DATABASE_URL` | PostgreSQL con driver `asyncpg`, host y puerto **internos** (ver Credentials del servicio de base) |
-| backend | `CORS_ORIGINS` | Dominio HTTPS del frontend, con esquema y sin barra final |
-| backend | `SQL_ECHO` | `false` |
-| frontend | `API_UPSTREAM` | `<proyecto>_<servicio-backend>:8000` (host:puerto, sin `http://`) |
+## 6. Migraciones
 
-## Cómo se conectan
+**No hay Alembic.** La cátedra confirmó el 16/11/2026 que no se usa Alembic y que las tablas se crean con `create_all` al iniciar el backend. Cambiar el esquema de una tabla existente requiere hacerlo a mano en la base o recrearla.
 
-El navegador pide `https://<dominio>/api/libros/` al frontend. Nginx (`frontend/default.conf.template`) reenvía `/api/` a `http://${API_UPSTREAM}/`, quitando el prefijo, de modo que FastAPI recibe `/libros/`. El backend no es accesible desde internet.
+## 7. Carga inicial (seed)
 
-## Migraciones y carga inicial
+```
+docker exec <contenedor-backend> python -m app.seed
+```
 
-- **Esquema:** COMPLETAR según PA-1. Estado actual del backend: las tablas se crean al iniciar (`create_all`); no hay Alembic.
-- **Carga inicial:** `python -m app.seed` en el Shell del servicio backend. **Reinicia las 9 tablas**: ejecutarlo solo con la base vacía o de pruebas. COMPLETAR si se ejecutó y cuándo.
+- Se corrió **una sola vez** en producción el 16/11/2026, al desplegar. Cargó los datos iniciales de ejemplo (editoriales, géneros, autores, libros, clientes y una venta).
+- **Advertencia:** el seed reinicia la base. No volver a correrlo una vez cargados datos propios.
 
-## Verificación después de desplegar
+## 8. Cómo actualizar
 
-1. `https://<dominio>/` carga la página.
-2. `https://<dominio>/api/health/ready` responde 200.
+1. Mergear los cambios a `main` en GitHub.
+2. En Easypanel, abrir el servicio (`backend` y/o `frontend`) y pulsar **Deploy**. Se reconstruye la imagen desde `main`.
+3. Esperar a que el backend figure `healthy` y verificar:
+   - `curl.exe -I https://libreria.marianochirino.me/`
+   - `curl.exe -s https://libreria.marianochirino.me/api/health/ready`
+   - `curl.exe -s "https://libreria.marianochirino.me/api/libros/?limit=2"`
+
+Los datos persisten tras redesplegar: viven en `grupo10_db`, no en el contenedor del backend.
+
+## 9. Verificación después de desplegar
+
+1. `https://libreria.marianochirino.me/` carga la página.
+2. `https://libreria.marianochirino.me/api/health/ready` responde 200.
 3. El catálogo muestra los libros (datos reales desde la API).
 4. Se registra una venta y aparece en el historial.
 5. Tras redesplegar el backend, los datos siguen ahí (caso G-07).
+6. El backend no es accesible desde internet: sin dominio en Easypanel, sin puerto publicado en el host (`docker ps` muestra solo `8000/tcp`) y `https://libreria.marianochirino.me/libros/` (sin `/api/`) responde 404 de Nginx.
 
-## Cómo actualizar
-
-1. Subir los cambios a `main`.
-2. En Easypanel, **Deploy** del servicio modificado (backend y/o frontend).
-3. Repetir la verificación anterior.
-
-## Problemas conocidos y diagnóstico
+## 10. Problemas conocidos y diagnóstico
 
 | Síntoma | Qué revisar |
 |---|---|
@@ -64,3 +90,12 @@ El navegador pide `https://<dominio>/api/libros/` al frontend. Nginx (`frontend/
 | `/api/` da 502 | logs del frontend, `API_UPSTREAM`, nombre interno, puerto, backend `Running` |
 | `/api/health/ready` falla | logs del backend, `DATABASE_URL`, conexión a Postgres |
 | 404 en una petición | prefijo `/api` y barra final de la ruta |
+| `ERR_CONNECTION_TIMED_OUT` en el navegador | La URL pública va sin puerto; `:8080` es solo del `docker run` local |
+
+## 11. Backend del parcial 2 (contenedor `libreria`)
+
+Contenedor aparte (`docker run`, puerto 8000 publicado) que usaba la misma base. Quedó **detenido** (`docker stop libreria`) el 16/11/2026 y no se reinicia solo. Para revivirlo habría que corregir la `DATABASE_URL` de su archivo de entorno y correr `docker start libreria`.
+
+## 12. Evidencia
+
+Carpeta `evidencia/`: capturas y salidas de comandos del despliegue (build del frontend en Easypanel, arranque de Nginx y del backend con las 9 tablas, `/api/health/ready` con HTTP 200, puerto 443, persistencia tras redeploy con `CORS_ORIGINS`, `docker ps`, backend sin dominio, 404 sin `/api/` y consulta a la cátedra por Alembic). Ninguna contiene credenciales. El detalle por caso está en `evidencia/LEEME.md`.

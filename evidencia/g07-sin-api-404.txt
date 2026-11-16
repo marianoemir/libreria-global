@@ -1,0 +1,6 @@
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> curl.exe -i https://libreria.marianochirino.me/libros/
+HTTP/1.1 404 Not Found
+Content-Length: 153
+Content-Type: text/html
+Date: Mon, 16 Nov 2026 15:32:17 GMT
+Server: nginx/1.30.6

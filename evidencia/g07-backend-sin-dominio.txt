@@ -1,0 +1,5 @@
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> curl.exe -I https://grupo10-backend.zejgqh.easypanel.host/health/ready
+HTTP/1.1 404 Not Found
+Content-Length: 2901
+Content-Type: text/html
+Date: Mon, 16 Nov 2026 15:29:11 GMT

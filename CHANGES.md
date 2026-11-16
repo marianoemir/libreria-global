@@ -99,7 +99,7 @@ GL-06 ────────────────────────�
 - **Nota**: es el único change que toca código de `backend/`.
 
 ### [GL-07] `despliegue-easypanel` (Ejercicio 5 · 20 pts)
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` hecho
 - **Dueño**: Mariano · **Revisor**: Andrés · **Governance**: CRITICO (producción, credenciales)
 - **Scope**: dos servicios App en el proyecto de Easypanel. Backend: Build Path `/backend`, `DATABASE_URL`, `CORS_ORIGINS`, **sin dominio público**; carga inicial del seed (**antes** revisar que no borre datos que se quieran conservar). Frontend: Build Path `/frontend`, `API_UPSTREAM=<proyecto>_<servicio>:8000`, dominio HTTPS apuntando al puerto 80. Verificar desde la URL pública. Redactar `DEPLOY.md` (URL, revisión, rutas de build, puertos, proxy, nombres de variables, carga inicial, actualización). Sin credenciales reales en el repo.
 - **Dependencias**: GL-01, GL-02, GL-03, GL-04, GL-05, GL-06
@@ -124,7 +124,7 @@ GL-06 ────────────────────────�
 
 | # | Pregunta | Estado / propuesta |
 |---|---|---|
-| PA-1 | El PDF lista `alembic.ini` y `migrations/` dentro de `backend/`, pero el backend (regla dura de `backend/AGENTS.md`) crea las tablas con `create_all`, sin migraciones. | **Propuesta:** mantener `create_all`, explicarlo en `DEPLOY.md` («las tablas se crean al iniciar; no hay migraciones») y **consultárselo al profe** antes de entregar. Agregar Alembic solo si lo exige. |
+| PA-1 | El PDF lista `alembic.ini` y `migrations/` dentro de `backend/`, pero el backend (regla dura de `backend/AGENTS.md`) crea las tablas con `create_all`, sin migraciones. | **Propuesta:** mantener `create_all`, explicarlo en `DEPLOY.md` («las tablas se crean al iniciar; no hay migraciones») y **consultárselo al profe** antes de entregar. Agregar Alembic solo si lo exige. **Resuelta el 16/11/2026:** la cátedra indicó seguir con `create_all`, sin Alembic (`evidencia/g07-consulta-alembic.png`). |
 | PA-2 | Conexión frontend→backend: interna o por internet. | **Decidido:** interna (`API_UPSTREAM=<proyecto>_<servicio>:8000`). Confirmar el nombre interno real en Easypanel. |
 | PA-3 | ¿Se usa la base `grupo10_db` ya existente o una nueva en Easypanel? ¿Mismo servidor del backend actual? | Mariano confirma antes de GL-07. |
 | PA-4 | Puerto del backend: cada grupo debe usar uno distinto si lo publica (8000, 8001…). | Con la vía interna no hay puerto publicado en el host; si se publica, coordinar con el profe. |

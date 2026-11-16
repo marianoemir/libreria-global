@@ -1,0 +1,14 @@
+EVIDENCIA:  FECHA 16/11/2026  HORA 12:21
+
+root@srv1926813:~# docker stop libreria
+docker ps --format "table {{.Names}}\t{{.Ports}}\t{{.Status}}"
+libreria
+NAMES                                                      PORTS                                                                          STATUS
+grupo10_backend.1.44b1vab05vbykqeb41tbgyja2                8000/tcp                                                                       Up 7 minutes (healthy)
+grupo10_frontend.1.xfs5x5i7hixuofp5ui8vp1m2s               80/tcp                                                                         Up 27 minutes
+easypanel.1.u5ibpfumqz15y9kki14ejh740                      3000/tcp                                                                       Up 3 weeks
+grupo10_db.1.wlmkjny53x0w9st08hftpu94v                     5432/tcp                                                                       Up 3 weeks
+easypanel-traefik.1.03ujackg01y433wyaj8pt57ad              0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:443->443/tcp, [::]:443->443/tcp   Up 3 weeks
+grupo10_calculadora-frontend.1.s0e5pcxg7ttb7zkks6vwvqxu0   80/tcp                                                                         Up 3 weeks
+grupo10_calculadora-backend.1.v0vvp0j9dk248kksbogeirafn    8000/tcp                                                                       Up 3 weeks
+root@srv1926813:~#
