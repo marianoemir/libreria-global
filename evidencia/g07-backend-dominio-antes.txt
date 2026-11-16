@@ -1,0 +1,8 @@
+
+Evidencia: Fecha 16/11/2026 Hora: 12:26
+
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> curl.exe -i https://grupo10-backend.zejgqh.easypanel.host/health/ready
+HTTP/1.1 502 Bad Gateway
+Content-Length: 2871
+Content-Type: text/html
+Date: Mon, 16 Nov 2026 15:24:10 GMT

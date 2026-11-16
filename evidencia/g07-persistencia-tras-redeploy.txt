@@ -1,0 +1,5 @@
+EVIDENCIA:  FECHA 16/11/2026  HORA 12:14
+
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global> curl.exe -s "https://libreria.marianochirino.me/api/libros/?limit=2"
+[{"id":1,"isbn":"978-950-00-0001-1","titulo":"Rayuela","precio":"25000.00","stock":10,"editorial_id":1,"genero_id":1,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":1,"nombre":"Novela"}},{"id":2,"isbn":"978-950-00-0002-8","titulo":"Bestiario","precio":"18000.00","stock":6,"editorial_id":1,"genero_id":2,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":2,"nombre":"Cuento"}}]
+PS C:\Users\Mariano_Chirino\Documents\GitHub\libreria-global>
