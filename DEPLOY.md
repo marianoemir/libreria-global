@@ -51,7 +51,7 @@ Los valores se cargan en la pestaña **Environment** de cada servicio, sin tilda
 
 ## 6. Migraciones
 
-**No hay Alembic.** Las tablas se crean con `create_all` en el `lifespan` del backend al arrancar. Cambiar el esquema de una tabla existente requiere hacerlo a mano en la base o recrearla. (Pendiente de consulta con la cátedra si se exige `alembic.ini` y `migrations/`.)
+**No hay Alembic.** La cátedra confirmó el 16/11/2026 que no se usa Alembic y que las tablas se crean con `create_all` al iniciar el backend. Cambiar el esquema de una tabla existente requiere hacerlo a mano en la base o recrearla.
 
 ## 7. Carga inicial (seed)
 
