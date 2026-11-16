@@ -99,7 +99,7 @@ GL-06 ────────────────────────�
 - **Nota**: es el único change que toca código de `backend/`.
 
 ### [GL-07] `despliegue-easypanel` (Ejercicio 5 · 20 pts)
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` hecho
 - **Dueño**: Mariano · **Revisor**: Andrés · **Governance**: CRITICO (producción, credenciales)
 - **Scope**: dos servicios App en el proyecto de Easypanel. Backend: Build Path `/backend`, `DATABASE_URL`, `CORS_ORIGINS`, **sin dominio público**; carga inicial del seed (**antes** revisar que no borre datos que se quieran conservar). Frontend: Build Path `/frontend`, `API_UPSTREAM=<proyecto>_<servicio>:8000`, dominio HTTPS apuntando al puerto 80. Verificar desde la URL pública. Redactar `DEPLOY.md` (URL, revisión, rutas de build, puertos, proxy, nombres de variables, carga inicial, actualización). Sin credenciales reales en el repo.
 - **Dependencias**: GL-01, GL-02, GL-03, GL-04, GL-05, GL-06
