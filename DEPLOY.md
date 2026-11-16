@@ -98,4 +98,4 @@ Contenedor aparte (`docker run`, puerto 8000 publicado) que usaba la misma base.
 
 ## 12. Evidencia
 
-Carpeta `evidencia/`: capturas y salidas de comandos del despliegue (puerto 443, persistencia tras redeploy con `CORS_ORIGINS`, `docker ps`, backend sin dominio, 404 sin `/api/`). Ninguna contiene credenciales.
+Carpeta `evidencia/`: capturas y salidas de comandos del despliegue (build del frontend en Easypanel, arranque de Nginx y del backend con las 9 tablas, `/api/health/ready` con HTTP 200, puerto 443, persistencia tras redeploy con `CORS_ORIGINS`, `docker ps`, backend sin dominio, 404 sin `/api/` y consulta a la cátedra por Alembic). Ninguna contiene credenciales. El detalle por caso está en `evidencia/LEEME.md`.
