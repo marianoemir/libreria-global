@@ -1,0 +1,3 @@
+﻿PS> curl.exe -s "https://libreria.marianochirino.me/api/libros/?limit=2&offset=2"
+Fecha: 16/11/2026 17:20
+[{"id":3,"isbn":"978-950-00-0003-5","titulo":"La invención de Morel","precio":"20000.00","stock":5,"editorial_id":1,"genero_id":1,"editorial":{"id":1,"nombre":"Sudamericana","pais":"Argentina"},"genero":{"id":1,"nombre":"Novela"}},{"id":4,"isbn":"978-950-00-0004-2","titulo":"Respiración artificial","precio":"27000.00","stock":7,"editorial_id":2,"genero_id":1,"editorial":{"id":2,"nombre":"Anagrama","pais":"España"},"genero":{"id":1,"nombre":"Novela"}}]

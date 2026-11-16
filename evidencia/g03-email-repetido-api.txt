@@ -1,0 +1,5 @@
+﻿PS> curl.exe -s -X POST https://libreria.marianochirino.me/api/clientes/ --data-binary @cuerpo-cliente.json
+Cuerpo: {"nombre":"Repetido Prueba","email":"prueba.gl09@example.com"}
+Fecha: 16/11/2026 18:15
+{"detail":"El email ya está registrado."}
+HTTP 409

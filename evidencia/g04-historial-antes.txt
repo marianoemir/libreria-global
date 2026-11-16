@@ -1,0 +1,3 @@
+﻿PS> curl.exe -s https://libreria.marianochirino.me/api/ventas/
+Fecha: 16/11/2026 17:20
+[{"id":1,"fecha":"2026-01-15T12:00:00Z","total":"77000.00","cliente":{"id":2,"nombre":"Tomás Ríos","email":"tomas@example.com"},"renglones":[{"libro_id":1,"titulo":"Rayuela","cantidad":2,"precio_unitario":"25000.00","subtotal":"50000.00"},{"libro_id":4,"titulo":"Respiración artificial","cantidad":1,"precio_unitario":"27000.00","subtotal":"27000.00"}]}]
