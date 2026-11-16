@@ -76,7 +76,7 @@ GL-06 ────────────────────────�
   - `docs/ARQUITECTURA-FRONTEND.md` §Clientes compartidos
 
 ### [GL-05] `ventas-historial-fetch` (Ejercicio 3 · 25 pts)
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado (2026-11-15)
 - **Dueño**: Andrés · **Revisor**: Mariano · **Governance**: ALTO
 - **Scope**: `js/ventas.js`, `js/historial.js` + secciones `#ventas` e `#historial`. Elegir cliente (selector de `L.estado.clientes` + búsqueda por ID), agregar libros del catálogo (un renglón por libro, sumar cantidades), quitar renglones, confirmar con `POST /ventas/` enviando **solo** `cliente_id` y `renglones[{libro_id, cantidad}]`. Con el 201: mostrar precios unitarios, subtotales y total **de la respuesta**, limpiar el formulario, actualizar el historial, deshabilitar el botón durante el envío. Errores: 409 y 422 muestran el mensaje del servidor y **conservan el borrador**. Historial con `GET /ventas/` (`limit`/`offset`) y detalle con `GET /ventas/{id}` (fecha, cliente, renglones, importes) mostrando los importes del servidor tal cual. Casos **G-04, G-05 y G-06**.
 - **Dependencias**: GL-02 (y GL-04 para la lista compartida de clientes; si no está, el selector funciona con la búsqueda por ID)
