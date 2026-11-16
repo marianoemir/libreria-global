@@ -9,8 +9,8 @@
 
 ## 2. Escenarios GL-07 (evidencia)
 
-- [ ] 2.1 **Escenario 1 — Imagen del frontend construida en Easypanel.** Respaldo actual insuficiente en `evidencia/g07-*` (no hay log de build del frontend). `DEPLOY.md` documenta Build Path `/frontend` y Dockerfile, pero falta evidencia explícita del build exitoso.
-- [ ] 2.2 **Escenario 2 — `/api/health/ready` responde 200 por HTTPS.** `evidencia/g07-health-tras-borrar-dominio.txt` muestra `{"estado":"listo"}` (respaldo del estado listo), pero falta evidencia con código HTTP 200 explícito.
+- [x] 2.1 **Escenario 1 — Imagen del frontend construida en Easypanel.** Respaldado por `evidencia/g07-build-frontend.txt` (el log termina en Success) y por `DEPLOY.md` (Build Path `/frontend`, Dockerfile).
+- [x] 2.2 **Escenario 2 — `/api/health/ready` responde 200 por HTTPS.** Respaldado por `evidencia/g07-health-200.txt` (HTTP 200 explícito) y por `evidencia/g07-health-tras-borrar-dominio.txt` (`{"estado":"listo"}`).
 - [x] 2.3 **Escenario 3 — Catálogo carga datos reales desde la URL pública.** Respaldado por `evidencia/g07-persistencia-tras-redeploy.txt` (`GET https://libreria.marianochirino.me/api/libros/?limit=2` con datos reales).
 - [x] 2.4 **Escenario 4 — Datos persisten tras redesplegar el backend.** Respaldado por `evidencia/g07-persistencia-tras-redeploy.txt` y por `DEPLOY.md` (datos en `grupo10_db`, no en el contenedor del backend).
 - [x] 2.5 **Escenario 5 — Backend no accesible desde internet.** Respaldado por `evidencia/g07-sin-api-404.txt`, `evidencia/g07-backend-sin-dominio.txt`, `evidencia/g07-docker-ps.txt`, `evidencia/g07-backend-dominio-antes.txt`, `evidencia/g07-backend-domains-vacio.png` y `DEPLOY.md` (sin dominio público del backend; solo 80/443 expuestos por Traefik).
@@ -23,15 +23,15 @@
 
 ## 4. Pendientes de evidencia (a agregar por el usuario)
 
-- [ ] 4.1 Agregar evidencia de health con código HTTP 200 explícito.
-- [ ] 4.2 Agregar log de arranque con «Arranque completado; tablas creadas».
-- [ ] 4.3 Agregar captura `evidencia/g07-consulta-alembic.png`.
-- [ ] 4.4 Agregar log de build del frontend en Easypanel.
+- [x] 4.1 Agregar evidencia de health con código HTTP 200 explícito.
+- [x] 4.2 Agregar log de arranque con «Arranque completado; tablas creadas».
+- [x] 4.3 Agregar captura `evidencia/g07-consulta-alembic.png`.
+- [x] 4.4 Agregar log de build del frontend en Easypanel.
 
 ## 5. Cierre de roadmap (solo junto con archivado confirmado)
 
-- [ ] 5.1 Marcar GL-07 como `[x]` en `CHANGES.md` y cerrar PA-1 como resuelta (16/11/2026), dejando GL-08 sin marcar. **No realizar antes del archivado confirmado.**
-- [ ] 5.2 Archivar el change en `openspec/changes/archive/` y sincronizar specs según flujo OpenSpec. **No realizar hasta confirmación explícita.**
+- [x] 5.1 Marcar GL-07 como `[x]` en `CHANGES.md` y cerrar PA-1 como resuelta (16/11/2026), dejando GL-08 sin marcar. **No realizar antes del archivado confirmado.**
+- [x] 5.2 Archivar el change en `openspec/changes/archive/` y sincronizar specs según flujo OpenSpec. **No realizar hasta confirmación explícita.**
 
 ## Referencias de evidencia
 

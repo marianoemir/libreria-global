@@ -9,7 +9,7 @@ Despliegue en la VPS con Easypanel (Docker Swarm + Traefik). Este documento **no
 | URL pública | https://libreria.marianochirino.me/ |
 | Fecha del despliegue | 16/11/2026 |
 | Repositorio | `marianoemir/libreria-global`, rama `main` |
-| Revisión desplegada | `ef9d19c` (verificar en Easypanel → servicio → Deployments) |
+| Revisión desplegada | `ef9d19c` (commit «Merge pull request #7…»; es el que muestra el log de build en `evidencia/g07-build-frontend.txt`) |
 | Proyecto Easypanel | `grupo10` |
 | Base de datos | servicio PostgreSQL `grupo10_db` (base `libreria`) |
 
@@ -19,7 +19,7 @@ Despliegue en la VPS con Easypanel (Docker Swarm + Traefik). Este documento **no
 Internet ──443──> Traefik ──80──> frontend (Nginx) ──/api/──> grupo10_backend:8000 (FastAPI) ──5432──> grupo10_db (Postgres)
 ```
 
-- Los únicos puertos publicados al exterior son **80 y 443** (Traefik). `ufw` permite 22, 80 y 443.
+- Los únicos puertos publicados al exterior son **80 y 443** (Traefik), como muestra `evidencia/g07-docker-ps.txt`.
 - El **backend no tiene dominio** en Easypanel ni puerto publicado en el host: solo es alcanzable por la red interna, a través del proxy `/api/` del frontend.
 - La base `libreria` (usuario `libreria_app`) es independiente de la base de la calculadora, aunque comparten el servicio `grupo10_db`.
 
@@ -59,7 +59,7 @@ Los valores se cargan en la pestaña **Environment** de cada servicio, sin tilda
 docker exec <contenedor-backend> python -m app.seed
 ```
 
-- Se corrió **una sola vez** en producción el 16/11/2026 (27 filas: editorial 2, género 2, autor 5, libro 5, libro_autor 5, cliente 3, perfil_cliente 2, venta 1, renglón_venta 2).
+- Se corrió **una sola vez** en producción el 16/11/2026, al desplegar. Cargó los datos iniciales de ejemplo (editoriales, géneros, autores, libros, clientes y una venta).
 - **Advertencia:** el seed reinicia la base. No volver a correrlo una vez cargados datos propios.
 
 ## 8. Cómo actualizar
